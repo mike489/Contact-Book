@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import Navigation from "./Nav/Navigation";
-import classes from "./home.module.css";
+import { useState } from "react";
 
 const data = [
   {
@@ -61,7 +61,30 @@ const data = [
 //   manager: "cyan",
 //   designer: "pink",
 // };
+
+interface HomeProps {
+  contact: any;
+  deleteContact: (contactName: string) => void;
+  editContact: (contactName: string, employeeId: string) => void;
+}
+
 const Home = () => {
+  const [contactName, setContactName] = useState("");
+  const [employeeId, setEmployeeId] = useState("");
+  // const [contact];
+
+  const addContact = (contactName: string, employeeId: string) => {
+    console.log("addContact");
+  };
+
+  const deleteContact = (contactName: string) => {
+    console.log("deleteContact");
+  };
+
+  const editContact = (contactName: string, employeeId: string) => {
+    console.log("editContact");
+  };
+
   const rows = data.map((item) => (
     <Table.Tr key={item.name}>
       <Table.Td>
@@ -83,13 +106,26 @@ const Home = () => {
       </Table.Td>
       <Table.Td>
         <Group gap={0} justify="flex-end">
-          <ActionIcon variant="subtle" color="gray">
+          <ActionIcon
+            variant="subtle"
+            color="gray"
+            onClick={() => {
+              editContact(item.contactName, item.employeeId);
+            }}
+          >
             <IconPencil
               style={{ width: rem(16), height: rem(16) }}
               stroke={1.5}
             />
           </ActionIcon>
-          <ActionIcon variant="subtle" color="red">
+          <ActionIcon
+            variant="subtle"
+            color="red"
+            onClick={() => {
+              deleteContact(item.contactName);
+              // console.log("editContact");
+            }}
+          >
             <IconTrash
               style={{ width: rem(16), height: rem(16) }}
               stroke={1.5}

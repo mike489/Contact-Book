@@ -9,7 +9,7 @@ import SignIn from "../features/auth/sign-in/sign-in";
 import ForgotPassword from "../features/auth/forgot-password/forgot-password";
 import ResetPassword from "../features/auth/reset-password/reset-password";
 import Home from "../features/home/index";
-import Navigation from "../features/home/Nav/Navigation";
+// import Navigation from "../features/home/Nav/Navigation";
 
 const AppRouter = () => {
   return (
