@@ -9,6 +9,7 @@ import SignIn from "../features/auth/sign-in/sign-in";
 import ForgotPassword from "../features/auth/forgot-password/forgot-password";
 import ResetPassword from "../features/auth/reset-password/reset-password";
 import Home from "../features/home/index";
+// import ContactFrom from "../features/form/addcontact-form/contact-form";
 // import Navigation from "../features/home/Nav/Navigation";
 
 const AppRouter = () => {
@@ -22,9 +23,7 @@ const AppRouter = () => {
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />
         </Route>
-        
-          <Route path="/home" element={<Home />} />
-        
+        <Route path="/home" element={<Home />} />
       </Routes>
     </Router>
   );
