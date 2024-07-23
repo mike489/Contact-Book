@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 // import axios from "axios";
 import { Button, Center, Paper, TextInput } from "@mantine/core";
-import ContactList from "../../../components/contact-list/contact-list";
 
 interface Contact {
   user: string;
@@ -29,10 +28,6 @@ const ContactForm = (props: Props) => {
   const [contacts, setContacts] = React.useState<Contact[]>([]);
 
   const [showPage, setShowpage] = useState("list");
-
-  const showListPage = () => {
-    setShowpage("list");
-  };
 
   const onAddContact = () => {
     setShowpage("add");
@@ -70,8 +65,7 @@ const ContactForm = (props: Props) => {
   //   }));
   // };
 
-  const handleBtnSubmit = (e: any) => {
-    e.preventDefault();
+  const handleBtnSubmit = () => {
     const data: Contact = {
       user: new Date().toJSON().toString(),
       name: name,
@@ -148,7 +142,15 @@ const ContactForm = (props: Props) => {
                 mt="md"
                 size="md"
               />
-
+              <Button
+                type="button"
+                value="add contact"
+                ml="sm"
+                mt="xl"
+                size="sm"
+              >
+                Back
+              </Button>
               <Button
                 type="button"
                 value="add contact"

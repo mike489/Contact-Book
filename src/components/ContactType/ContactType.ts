@@ -19,3 +19,8 @@ export const dummyContact: IContact[] = [
     phone: "+251919640891",
   },
 ];
+
+export enum PageEnum {
+  list,
+  add,
+}
