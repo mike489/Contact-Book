@@ -13,16 +13,17 @@ import {
   // colorsTuple,
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
-import Navigation from "../../features/home/Nav/Navigation";
 
 import { IContact } from "../ContactType/ContactType";
 
 type Props = {
   list: IContact[];
+  // onDeleteHandler: (id: string) => void;
+  onDeleteHandler: (data: IContact) => void;
 };
 
 const ContactList = (props: Props) => {
-  const { list } = props;
+  const { list, onDeleteHandler } = props;
 
   const rows = list.map((contact) => {
     return (
@@ -60,9 +61,9 @@ const ContactList = (props: Props) => {
             <ActionIcon
               variant="subtle"
               color="red"
-              // onClick={() => {
-              //   deleteContact(item.name);
-              // }}
+              onClick={() => {
+                onDeleteHandler(contact);
+              }}
             >
               <IconTrash
                 style={{ width: rem(16), height: rem(16) }}
@@ -77,8 +78,6 @@ const ContactList = (props: Props) => {
 
   return (
     <Table.ScrollContainer minWidth={800}>
-      <Navigation />
-
       <Table verticalSpacing="sm" style={{ marginTop: "50px" }}>
         <Table.Thead>
           <Table.Tr>

@@ -6,7 +6,8 @@ import {
   IContact,
   PageEnum,
 } from "../../components/ContactType/ContactType";
-import AddContact from "../../components/addContact/addContact";
+import ContactForm from "../../features/form/contact-form/contact-form";
+import Navigation from "./Nav/Navigation";
 
 const Home = () => {
   const [contactsList, setcontactsList] = useState(dummyContact as IContact[]);
@@ -23,31 +24,49 @@ const Home = () => {
 
   const addContact = (data: IContact) => {
     setcontactsList([...contactsList, data]);
-    // setShowPage(PageEnum.list);
   };
 
-  // const resetForm = () => {
-  //   setIsModalOpen(false); // Close the modal when resetting the form
-  // };
+  const deleteContact = (data: IContact) => {
+    // To delete a contact, we need to filter out the contact that we want to delete
+    // from the contactsList array and set the new array to the state
+    // splice that
+    // const indexToDelete = contactsList.findIndex((contact) => contact.id === data.id);
+    const indexToDelete = contactsList.indexOf(data);
+    const newContactList = [...contactsList];
+
+    newContactList.splice(indexToDelete, 1);
+    setcontactsList(newContactList);
+  };
 
   return (
     <div>
       {showPage === PageEnum.list && (
         <>
-          <ContactList list={contactsList} />
-          <Button
-            ml="sm"
-            mt="xl"
-            size="sm"
-            value="Add Contact"
-            onClick={addContactHandler}
+          <Navigation />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            Add Contact
-          </Button>
+            <h1 style={{ marginLeft: "auto" }}>Contact List</h1>
+            <Button
+              size="sm"
+              onClick={addContactHandler}
+              style={{ marginLeft: "auto", marginRight: "10px" }}
+            >
+              Add Contact
+            </Button>
+          </div>
+          <ContactList list={contactsList} onDeleteHandler={deleteContact} />
         </>
       )}
       {showPage === PageEnum.add && (
-        <AddContact backBtnHandler={showListPage} onSubmithandler={addContact} />
+        <ContactForm
+          backBtnHandler={showListPage}
+          onSubmithandler={addContact}
+        />
       )}
     </div>
   );
