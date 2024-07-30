@@ -8,24 +8,27 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+
+import classes from "../auth.module.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import classes from "../auth.module.css";
-import { notifications } from "@mantine/notifications";
-import API from "../../../app/api";
 
 interface FormValues {
+  name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
-const SignIn = () => {
+const SignUp = () => {
   const navigate = useNavigate();
 
   const form = useForm({
     initialValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
@@ -33,6 +36,8 @@ const SignIn = () => {
         value.length >= 6
           ? null
           : "Password must be at least 6 characters long",
+      confirmPassword: (value, values) =>
+        value === values.password ? null : "Passwords do not match",
     },
   });
 
@@ -41,30 +46,41 @@ const SignIn = () => {
     event: React.FormEvent<HTMLFormElement> | undefined
   ) => {
     event?.preventDefault();
-    const { email, password } = values;
-    console.log({ email, password });
-    API.post("/api/users/login", { email, password }).then((response) => {
-      console.log(response);
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        navigate("/home");
-      } else {
-        notifications.show({
-          title: "Error",
-          message: response.data.msg || "Invalid email or password",
-          color: "red",
-        });
+    const { name, email, password } = values;
+    console.log({ name, email, password });
+    fetch(
+      "https://contact-keeper-api-production.up.railway.app/api/users/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
       }
-    });
+    )
+      // .then((response) => response.json())
+      .then((response) => {
+        navigate("/auth/sign-in");
+        console.log("Success:", response);
+      })
+      // (e.g., redirect to home page the contact list that we will create)
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
-
   return (
     <Paper className={classes.form} radius={0} p={30}>
       <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
-        Sign in to your account
+        Welcome to Contact Book!
       </Title>
 
       <form onSubmit={form.onSubmit(handleSubmit)}>
+        <TextInput
+          label="Name"
+          placeholder="Your name"
+          size="md"
+          {...form.getInputProps("name")}
+        />
         <TextInput
           label="Email address"
           placeholder="hello@gmail.com"
@@ -80,15 +96,21 @@ const SignIn = () => {
           size="md"
           {...form.getInputProps("password")}
         />
+        <PasswordInput
+          label="Confirm Password"
+          placeholder="Confirm your password"
+          mt="md"
+          {...form.getInputProps("confirmPassword")}
+        />
 
         <Button fullWidth mt="xl" size="md" type="submit">
-          Sign in
+          Sign up
         </Button>
 
         <Text ta="center" mt="md">
-          Don't have an account?{" "}
-          <Anchor component={Link} to="/auth/sign-up" fw={700}>
-            Sign Up
+          I have an account{" "}
+          <Anchor component={Link} to="/auth/sign-in" fw={700}>
+            Sign In
           </Anchor>
         </Text>
       </form>
@@ -96,4 +118,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;

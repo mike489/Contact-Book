@@ -2,6 +2,9 @@ import React, { useState } from "react";
 
 import { Button, Center, Paper, TextInput } from "@mantine/core";
 import { IContact } from "../../../components/ContactType/ContactType";
+// import ContactList from "../../../components/contact-list/contact-list";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 type Props = {
   backBtnHandler: () => void;
@@ -27,28 +30,33 @@ const ContactForm = (props: Props) => {
     setPhone(e.target.value);
   };
 
+  const token = localStorage.getItem("token");
+  console.log(token);
+
+  const user = token ? jwtDecode(token) : null;
+  console.log(user);
+
   const onSubmitBtnhandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data: IContact = {
+    const data = {
       id: new Date().getTime().toString(),
-      name: name,
-      email: email,
-      phone: phone,
+      name: "",
+      email: "",
+      phone: "",
     };
 
     try {
-      const response = await fetch(
-        "https://contact-keeper-api-production.up.railway.app//api/contacts",
+      const response = await axios.post(
+        "https://contact-keeper-api-production.up.railway.app/api/contacts",
+        data,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
         }
       );
 
-      if (!response) {
+      if (response.status === 200) {
         console.log("Contact data submitted successfully!");
         backBtnHandler();
       } else {

@@ -1,16 +1,12 @@
 import { useState } from "react";
 import ContactList from "../../components/contact-list/contact-list";
 import { Button } from "@mantine/core";
-import {
-  dummyContact,
-  IContact,
-  PageEnum,
-} from "../../components/ContactType/ContactType";
+import { IContact, PageEnum } from "../../components/ContactType/ContactType";
 import ContactForm from "../../features/form/contact-form/contact-form";
 import Navigation from "./Nav/Navigation";
 
 const Home = () => {
-  const [contactsList, setcontactsList] = useState(dummyContact as IContact[]);
+  const [contactsList, setcontactsList] = useState([] as IContact[]);
 
   const [showPage, setShowPage] = useState(PageEnum.list);
 

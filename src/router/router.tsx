@@ -9,6 +9,7 @@ import SignIn from "../features/auth/sign-in/sign-in";
 import ForgotPassword from "../features/auth/forgot-password/forgot-password";
 import ResetPassword from "../features/auth/reset-password/reset-password";
 import Home from "../features/home/index";
+import SignUp from "../features/auth/sign-up/sign-up";
 // import ContactFrom from "../features/form/addcontact-form/contact-form";
 // import Navigation from "../features/home/Nav/Navigation";
 
@@ -20,6 +21,7 @@ const AppRouter = () => {
         <Route path="/auth" element={<Auth />}>
           <Route index element={<Navigate to="sign-in" />} />
           <Route path="sign-in" element={<SignIn />} />
+          <Route path="sign-up" element={<SignUp />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />
         </Route>

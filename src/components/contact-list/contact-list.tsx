@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   // Avatar,
   // Badge,
@@ -15,6 +16,7 @@ import {
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 
 import { IContact } from "../ContactType/ContactType";
+import API from "../../app/api";
 
 type Props = {
   list: IContact[];
@@ -23,11 +25,25 @@ type Props = {
 };
 
 const ContactList = (props: Props) => {
-  const { list, onDeleteHandler } = props;
+  const { onDeleteHandler } = props;
+  const [contactList, setContactList] = useState<IContact[]>([]);
 
-  const rows = list.map((contact) => {
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
+  const fetchContacts = async () => {
+    await API.get("/api/contacts").then((response) => {
+      console.log(response);
+      if (response.data) {
+        setContactList(response.data);
+      }
+    });
+  };
+
+  const rows = contactList.map((contact) => {
     return (
-      <Table.Tr>
+      <Table.Tr key={contact._id}>
         <Table.Td>
           <Group gap="sm">
             <Text fz="sm" fw={500}>
@@ -49,7 +65,7 @@ const ContactList = (props: Props) => {
               variant="subtle"
               color="gray"
               // onClick={() => {
-              //   editContact(item.employeeId);
+              //   editContact(contact);
               //   console.log("clicked edit");
               // }}
             >
@@ -87,7 +103,7 @@ const ContactList = (props: Props) => {
             <Table.Th />
           </Table.Tr>
         </Table.Thead>
-        {rows}
+        <Table.Tbody>{rows}</Table.Tbody>
       </Table>
     </Table.ScrollContainer>
   );
