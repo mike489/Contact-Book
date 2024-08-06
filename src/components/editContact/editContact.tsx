@@ -1,25 +1,23 @@
-import React from "react";
-
 import { Button, Center, Paper, TextInput } from "@mantine/core";
-import { IContact } from "../../../components/ContactType/ContactType";
-// import ContactList from "../../../components/contact-list/contact-list";
-
-import { jwtDecode } from "jwt-decode";
-import API from "../../../app/api";
 import { useForm } from "@mantine/form";
+import { IContact } from "../ContactType/ContactType";
+import API from "../../app/api";
 
 type Props = {
+  contact: IContact;
   backBtnHandler: () => void;
   onSubmithandler: (data: IContact) => void;
 };
 
-const ContactForm = (props: Props) => {
+const EditContact = (props: Props) => {
+  const { backBtnHandler, contact, onSubmithandler } = props;
   const form = useForm({
     initialValues: {
-      name: "",
-      email: "",
-      phone: "",
-      type: "",
+      _id: contact._id,
+      name: contact.name || "",
+      email: contact.email || "",
+      phone: contact.phone || "",
+      type: contact.type || "",
     },
     validate: {
       name: (value) => (value.length > 0 ? null : "Name is required"),
@@ -27,33 +25,20 @@ const ContactForm = (props: Props) => {
         /^\S+@\S+$/.test(value) ? null : "Invalid email address",
       phone: (value) =>
         /^\d{10}$/.test(value) ? null : "Phone number must be 10 digits",
-      type: (value) => (value.length > 0 ? null : "Type is required"),
     },
   });
-
-  const { backBtnHandler, onSubmithandler } = props;
-
-  const token = localStorage.getItem("token");
-  console.log(token);
-
-  const user = token ? jwtDecode(token) : null;
-  console.log(user);
-
-  const onSubmitBtnhandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmitBtnHandler = async (
+    values: IContact,
+    e?: React.FormEvent<HTMLFormElement>
+  ) => {
+    e?.preventDefault();
     try {
-      const response = await API.post("/api/contacts", form.values);
-      console.log(response.data);
-      if (response.data.token) {
-        const data = response.data;
-        localStorage.setItem("token", response.data.token);
-        // Handle successful response
-
-        onSubmithandler(data);
-        backBtnHandler();
-      }
+      await API.put(`/api/contacts/${contact._id}`, values);
+      console.log("Contact updated successfully:", values);
+      onSubmithandler(values); // Optional: call a handler to update state in parent component
+      backBtnHandler(); // Redirect to contact list
     } catch (error) {
-      console.error("Error submitting contact form:", error);
+      console.error("Failed to update contact:", error);
     }
   };
 
@@ -61,8 +46,7 @@ const ContactForm = (props: Props) => {
     <>
       <Center>
         <Paper radius={0} p={30}>
-          <h2>Contact Form</h2>
-          <form onSubmit={onSubmitBtnhandler}>
+          <form onSubmit={form.onSubmit(onSubmitBtnHandler)}>
             <TextInput
               label="Name"
               type="text"
@@ -92,8 +76,9 @@ const ContactForm = (props: Props) => {
               mt="md"
               size="md"
             />
+
             <TextInput
-              label="Type"
+              label="type"
               type="text"
               name="type"
               {...form.getInputProps("type")}
@@ -112,7 +97,7 @@ const ContactForm = (props: Props) => {
               Back
             </Button>
             <Button type="submit" value="add contact" ml="sm" mt="xl" size="sm">
-              Add
+              Edit
             </Button>
           </form>
         </Paper>
@@ -121,4 +106,4 @@ const ContactForm = (props: Props) => {
   );
 };
 
-export default ContactForm;
+export default EditContact;

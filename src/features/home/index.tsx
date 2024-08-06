@@ -20,18 +20,7 @@ const Home = () => {
 
   const addContact = (data: IContact) => {
     setcontactsList([...contactsList, data]);
-  };
-
-  const deleteContact = (data: IContact) => {
-    // To delete a contact, we need to filter out the contact that we want to delete
-    // from the contactsList array and set the new array to the state
-    // splice that
-    // const indexToDelete = contactsList.findIndex((contact) => contact.id === data.id);
-    const indexToDelete = contactsList.indexOf(data);
-    const newContactList = [...contactsList];
-
-    newContactList.splice(indexToDelete, 1);
-    setcontactsList(newContactList);
+    showListPage();
   };
 
   return (
@@ -55,7 +44,7 @@ const Home = () => {
               Add Contact
             </Button>
           </div>
-          <ContactList list={contactsList} onDeleteHandler={deleteContact} />
+          <ContactList />
         </>
       )}
       {showPage === PageEnum.add && (

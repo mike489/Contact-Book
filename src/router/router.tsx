@@ -10,8 +10,6 @@ import ForgotPassword from "../features/auth/forgot-password/forgot-password";
 import ResetPassword from "../features/auth/reset-password/reset-password";
 import Home from "../features/home/index";
 import SignUp from "../features/auth/sign-up/sign-up";
-// import ContactFrom from "../features/form/addcontact-form/contact-form";
-// import Navigation from "../features/home/Nav/Navigation";
 
 const AppRouter = () => {
   return (

@@ -3,6 +3,7 @@ export interface IContact {
   name: string;
   email: string;
   phone: string;
+  type: string;
 }
 
 // export const dummyContact: IContact[] = [
